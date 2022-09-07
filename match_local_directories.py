@@ -33,7 +33,6 @@ def main(args):
     unprocessed: list[str] = [d for (d, _) in albums if d is not None]
     albums: list[Album] = [a for (_, a) in albums if a is not None]
     # albums = albums[50:100]  # TODO remove
-    # unprocessed = None  # TODO remove
 
     spotify_id_matches = get_spotify_ids(spotify, [a for a in albums if a.spotify_id is None])
     albums = add_spotify_ids(albums, spotify_id_matches)
@@ -73,7 +72,6 @@ def print_unmatched(unmatched: list[Album]):
 
 
 def setup_logging(level):
-    logging.basicConfig(level=level, format="%(message)s")
     logging.basicConfig(level=level, format="%(levelname)s %(message)s")
 
 
