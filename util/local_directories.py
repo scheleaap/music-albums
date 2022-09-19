@@ -16,14 +16,14 @@ def get_albums_from_local_directory(base_path) -> tuple[str, Album]:
         m = re.match(directory_name_pattern, dir_name)
         if not exclude_dir(dir_name) and m:
             if m.group("spotify_id"):
-                spotify_id = "spotify:album:" + m.group("spotify_id")
+                spotify_uri = "spotify:album:" + m.group("spotify_id")
             else:
-                spotify_id = None
+                spotify_uri = None
             album = Album(
                 artist=m.group("artist"),
                 release_year=int(m.group("year")),
                 title=m.group("title"),
-                spotify_id=spotify_id
+                spotify_uri=spotify_uri
             )
             logging.debug(f'Matched directory {dir_path} to {album}')
             yield (None, album)

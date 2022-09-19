@@ -10,7 +10,7 @@ from tekore.model import SimpleAlbumPaging
 class AlbumMatchError:
     search_result: SimpleAlbumPaging
 
-def get_spotify_id(spotify: Spotify, search_album: Album) -> tuple[Album, str | AlbumMatchError]:
+def get_spotify_uri(spotify: Spotify, search_album: Album) -> tuple[Album, str | AlbumMatchError]:
     logging.debug(f'Searching for {search_album}')
     result = spotify.search(f"artist:'{search_album.artist}' AND album:'{search_album.title}'", types=('album',))
     album_type_albums: list[SimpleAlbum] = [a for a in result[0].items if a.album_type == AlbumType.album]
@@ -36,5 +36,5 @@ def get_spotify_id(spotify: Spotify, search_album: Album) -> tuple[Album, str | 
     else:
         return (search_album, AlbumMatchError(result[0]))
 
-def get_spotify_ids(spotify: Spotify, search_albums: list[Album]) -> dict[Album, str | AlbumMatchError]:
-    return dict([get_spotify_id(spotify, a) for a in search_albums])
+def get_spotify_uris(spotify: Spotify, search_albums: list[Album]) -> dict[Album, str | AlbumMatchError]:
+    return dict([get_spotify_uri(spotify, a) for a in search_albums])

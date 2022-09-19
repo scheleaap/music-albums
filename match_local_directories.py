@@ -3,7 +3,7 @@
 from dataclasses import replace
 from util.local_directories import get_albums_from_local_directory
 from util.model import Album
-from util.spotify import AlbumMatchError, get_spotify_ids
+from util.spotify import AlbumMatchError, get_spotify_uris
 import argparse
 import logging
 import sys
@@ -34,24 +34,24 @@ def main(args):
     albums: list[Album] = [a for (_, a) in albums if a is not None]
     # albums = albums[50:100]  # TODO remove
 
-    spotify_id_matches = get_spotify_ids(spotify, [a for a in albums if a.spotify_id is None])
-    albums = add_spotify_ids(albums, spotify_id_matches)
+    spotify_uri_matches = get_spotify_uris(spotify, [a for a in albums if a.spotify_uri is None])
+    albums = add_spotify_uris(albums, spotify_uri_matches)
 
-    print("Rating,Reviewed?,Artist,Released,Title,Spotify ID")
+    print("Rating,Artist,Released,Title,Spotify ID")
     for a in albums:
-        print(f'{args.rating},"{a.artist}",{a.release_year},"{a.title}",{a.spotify_id if a.spotify_id is not None else ""}')
+        print(f'{args.rating},"{a.artist}",{a.release_year},"{a.title}",{a.spotify_uri if a.spotify_uri is not None else ""}')
 
     print_unprocessed(unprocessed)
-    print_unmatched([a for a in albums if a.spotify_id is None])
+    print_unmatched([a for a in albums if a.spotify_uri is None])
 
 
-def add_spotify_ids(albums: list[Album], spotify_ids: dict[Album, str | AlbumMatchError]) -> list[Album]:
+def add_spotify_uris(albums: list[Album], spotify_uris: dict[Album, str | AlbumMatchError]) -> list[Album]:
     updated_albums = []
     for a in albums:
-        if a.spotify_id is None:
-            match = spotify_ids[a]
+        if a.spotify_uri is None:
+            match = spotify_uris[a]
             if isinstance(match, str):
-                updated_albums.append(replace(a, spotify_id=match))
+                updated_albums.append(replace(a, spotify_uri=match))
             else:
                 updated_albums.append(a)
         else:

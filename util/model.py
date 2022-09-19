@@ -6,4 +6,4 @@ class Album:
     artist: str
     release_year: int | None
     title: str
-    spotify_id: str | None = None
+    spotify_uri: str | None = None
